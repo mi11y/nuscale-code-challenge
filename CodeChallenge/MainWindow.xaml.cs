@@ -80,7 +80,6 @@ namespace CodeChallenge
         {
             DataContext = this;
             InitializeComponent();
-
             Books = BooksService.getBookInventory();
         }
 
@@ -92,13 +91,7 @@ namespace CodeChallenge
 
         private void AddClick(object sender, RoutedEventArgs e)
         {
-            if (!String.IsNullOrWhiteSpace(NewBookAuthor)
-                && !String.IsNullOrWhiteSpace(NewBookTitle)
-                && NewBookPageCount > 0)
-            {
-                bool success = BooksService.addNewBook(new Book() { Author = NewBookAuthor, Title = NewBookTitle, PageCount = NewBookPageCount });
-                IsButtonEnabled = success;
-            }
+            IsButtonEnabled = BooksService.addNewBook(NewBookTitle, NewBookAuthor, NewBookPageCount);
         }
     }
 }
