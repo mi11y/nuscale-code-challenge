@@ -115,8 +115,6 @@ namespace CodeChallenge
             get { return (int)GetValue(UpdateBookIdProperty); }
             set { SetValue(UpdateBookIdProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for UpdateBookId.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty UpdateBookIdProperty =
             DependencyProperty.Register("UpdateBookId", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
 
@@ -142,12 +140,14 @@ namespace CodeChallenge
         private void RemoveClick(object sender, RoutedEventArgs e)
         {
             BooksService.removeBook(SelectedBook);
-            IsDeleteEnabled = isUpdateEnabled = Books.Count == 0 ? false : true;
+            Books = BooksService.getBookInventory();
+            IsDeleteEnabled = isUpdateEnabled = false;
         }
 
         private void AddClick(object sender, RoutedEventArgs e)
         {
-            IsDeleteEnabled = isUpdateEnabled = BooksService.addNewBook(NewBookTitle, NewBookAuthor, NewBookPageCount);
+            BooksService.addNewBook(NewBookTitle, NewBookAuthor, NewBookPageCount);
+            IsDeleteEnabled = isUpdateEnabled = SelectedBook != null;
         }
 
         private void RowSelect(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -174,7 +174,9 @@ namespace CodeChallenge
         {
             if(SelectedBook != null)
             {
-                IsDeleteEnabled = isUpdateEnabled = !BooksService.updateBook(SelectedBook, UpdateBookAuthor, UpdateBookId, UpdateBookPageCount, UpdateBookTitle);
+                BooksService.updateBook(SelectedBook, UpdateBookAuthor, UpdateBookId, UpdateBookPageCount, UpdateBookTitle);
+                Books = BooksService.getBookInventory();
+                IsDeleteEnabled = isUpdateEnabled = false;
             }
         }
 
