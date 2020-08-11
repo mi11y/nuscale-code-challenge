@@ -11,11 +11,12 @@
         <DataGrid 
             HorizontalAlignment="Left" 
             Height="247" 
-            Margin="10,162,0,0" 
+            Margin="10,71,0,0" 
             VerticalAlignment="Top" 
             Width="772"
             ItemsSource="{Binding Books}"
             SelectedItem="{Binding SelectedBook}"
+            SelectionChanged="RowSelect"
             SelectionMode="Single"
             IsReadOnly="True"
             />
@@ -26,11 +27,17 @@
             VerticalAlignment="Top" 
             Width="75"
             Click="RemoveClick"
-            IsEnabled="{Binding IsButtonEnabled}"
+            IsEnabled="{Binding IsDeleteEnabled}"
             />
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="10,134,0,0" TextWrapping="Wrap" Text="{Binding NewBookTitle}" VerticalAlignment="Top" Width="181"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="196,134,0,0" TextWrapping="Wrap" Text="{Binding NewBookAuthor}" VerticalAlignment="Top" Width="133"/>
-        <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="334,134,0,0" VerticalAlignment="Top" FormatString="N0" Value="{Binding NewBookPageCount}" Height="23" Width="91"/>
-        <Button Content="Add Book" HorizontalAlignment="Left" Margin="707,134,0,0" VerticalAlignment="Top" Width="75" Click="AddClick" Height="23"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="10,43,0,0" TextWrapping="Wrap" Text="{Binding NewBookTitle}" VerticalAlignment="Top" Width="181"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="196,43,0,0" TextWrapping="Wrap" Text="{Binding NewBookAuthor}" VerticalAlignment="Top" Width="133"/>
+        <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="334,43,0,0" VerticalAlignment="Top" FormatString="N0" Value="{Binding NewBookPageCount}" Height="23" Width="91"/>
+        <Button Content="Add Book" HorizontalAlignment="Left" Margin="707,43,0,0" VerticalAlignment="Top" Width="75" Click="AddClick" Height="23"/>
+
+
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="161,361,0,0" TextWrapping="Wrap" Text="{Binding UpdateBookTitle}" VerticalAlignment="Top" Width="181"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="347,361,0,0" TextWrapping="Wrap" Text="{Binding UpdateBookAuthor}" VerticalAlignment="Top" Width="133"/>
+        <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="485,361,0,0" VerticalAlignment="Top" FormatString="N0" Value="{Binding UpdateBookPageCount}" Height="23" Width="91"/>
+        <xctk:IntegerUpDown IsReadOnly="True" HorizontalAlignment="Left" Margin="74,361,0,0" VerticalAlignment="Top" FormatString="N0" Value="{Binding UpdateBookId, Mode=OneWay}" Height="23" Width="75"/>
     </Grid>
 </Window>
