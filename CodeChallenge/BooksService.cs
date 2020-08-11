@@ -31,7 +31,7 @@ namespace CodeChallenge
                 Title = "The Rust Programming Language",
                 Author = "Steve Klabnik",
                 PageCount = 276,
-                Id = 1
+                Id = 2
             });
             return queryResult;
         }
@@ -66,6 +66,13 @@ namespace CodeChallenge
                 System.Console.WriteLine("Not Found");
                 return false;
             }
+        }
+
+        public static bool addNewBook(Book toAdd)
+        {
+            toAdd.Id = Instance.inventory.Count + 1;
+            Instance.inventory.Add(toAdd);
+            return true;
         }
     }
 }

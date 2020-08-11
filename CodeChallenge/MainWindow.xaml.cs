@@ -16,11 +16,8 @@ namespace CodeChallenge
             get { return (ObservableCollection<Book>)GetValue(BooksProperty); }
             set { SetValue(BooksProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for Books.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty BooksProperty =
             DependencyProperty.Register("Books", typeof(ObservableCollection<Book>), typeof(MainWindow), new PropertyMetadata(new ObservableCollection<Book>()));
-
 
         public Book SelectedBook
         {
@@ -30,6 +27,41 @@ namespace CodeChallenge
         public static readonly DependencyProperty SelectedBookProperty =
             DependencyProperty.Register("SelectedBook", typeof(Book), typeof(MainWindow), new PropertyMetadata(new Book()));
 
+
+
+        public string NewBookTitle
+        {
+            get { return (string)GetValue(NewBookTitleProperty); }
+            set { SetValue(NewBookTitleProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for NewBookTitle.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty NewBookTitleProperty =
+            DependencyProperty.Register("NewBookTitle", typeof(string), typeof(MainWindow), new PropertyMetadata("New Book Title"));
+
+
+
+        public string NewBookAuthor
+        {
+            get { return (string)GetValue(NewBookAuthorProperty); }
+            set { SetValue(NewBookAuthorProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for NewBookAuthor.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty NewBookAuthorProperty =
+            DependencyProperty.Register("NewBookAuthor", typeof(string), typeof(MainWindow), new PropertyMetadata("New Book Author"));
+
+
+
+        public int NewBookPageCount
+        {
+            get { return (int)GetValue(NewBookPageCountProperty); }
+            set { SetValue(NewBookPageCountProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for NewBookPageCount.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty NewBookPageCountProperty =
+            DependencyProperty.Register("NewBookPageCount", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
 
 
         public bool IsButtonEnabled
@@ -56,6 +88,17 @@ namespace CodeChallenge
         {
             BooksService.removeBook(SelectedBook);
             IsButtonEnabled = Books.Count == 0 ? false : true;
+        }
+
+        private void AddClick(object sender, RoutedEventArgs e)
+        {
+            if (!String.IsNullOrWhiteSpace(NewBookAuthor)
+                && !String.IsNullOrWhiteSpace(NewBookTitle)
+                && NewBookPageCount > 0)
+            {
+                bool success = BooksService.addNewBook(new Book() { Author = NewBookAuthor, Title = NewBookTitle, PageCount = NewBookPageCount });
+                IsButtonEnabled = success;
+            }
         }
     }
 }
