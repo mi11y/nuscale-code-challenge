@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace CodeChallenge
@@ -8,13 +9,18 @@ namespace CodeChallenge
     public partial class MainWindow : Window
     {
 
-        public List<Book> Books
+
+
+        public ObservableCollection<Book> Books
         {
-            get { return (List<Book>)GetValue(BooksProperty); }
+            get { return (ObservableCollection<Book>)GetValue(BooksProperty); }
             set { SetValue(BooksProperty, value); }
         }
+
+        // Using a DependencyProperty as the backing store for Books.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty BooksProperty =
-            DependencyProperty.Register("Books", typeof(List<Book>), typeof(MainWindow), new PropertyMetadata(new List<Book>()));
+            DependencyProperty.Register("Books", typeof(ObservableCollection<Book>), typeof(MainWindow), new PropertyMetadata(new ObservableCollection<Book>()));
+
 
         public Book SelectedBook
         {

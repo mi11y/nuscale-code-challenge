@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace CodeChallenge
 {
@@ -7,7 +8,7 @@ namespace CodeChallenge
     {
 
 
-        private List<Book> inventory;
+        private ObservableCollection<Book> inventory;
         private static BooksService instance = null;
 
         private BooksService()
@@ -15,13 +16,20 @@ namespace CodeChallenge
             inventory = getAllInventory();
         }
 
-        private List<Book> getAllInventory()
+        private ObservableCollection<Book> getAllInventory()
         {
-            List<Book> queryResult = new List<Book>();
+            ObservableCollection<Book> queryResult = new ObservableCollection<Book>();
             queryResult.Add(new Book()
             {
                 Title = "The C Programming Language",
                 Author = "Brian Kernighan",
+                PageCount = 276,
+                Id = 1
+            });
+            queryResult.Add(new Book()
+            {
+                Title = "The Rust Programming Language",
+                Author = "Steve Klabnik",
                 PageCount = 276,
                 Id = 1
             });
@@ -40,7 +48,7 @@ namespace CodeChallenge
             }
         }
 
-        public static List<Book> getBookInventory()
+        public static ObservableCollection<Book> getBookInventory()
         {
             return Instance.inventory;
         }
