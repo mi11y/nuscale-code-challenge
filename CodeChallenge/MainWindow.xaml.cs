@@ -134,10 +134,20 @@ namespace CodeChallenge
 
         private void RowSelect(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            UpdateBookAuthor = SelectedBook.Author;
-            UpdateBookTitle = SelectedBook.Title;
-            UpdateBookPageCount = SelectedBook.PageCount;
-            UpdateBookId = SelectedBook.Id;
+            if(SelectedBook != null)
+            {
+                UpdateBookAuthor = SelectedBook.Author;
+                UpdateBookTitle = SelectedBook.Title;
+                UpdateBookPageCount = SelectedBook.PageCount;
+                UpdateBookId = SelectedBook.Id;
+            }
+            else
+            {
+                UpdateBookAuthor = string.Empty;
+                UpdateBookTitle = string.Empty;
+                UpdateBookPageCount = 0;
+                UpdateBookId = 0;
+            }
         }
 
     }
