@@ -1,28 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CodeChallenge
 {
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml 
     /// </summary>
     public partial class MainWindow : Window
     {
+        public List<Book> Books
+        {
+            get { return (List<Book>)GetValue(BooksProperty); }
+            set { SetValue(BooksProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Books.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty BooksProperty =
+            DependencyProperty.Register("Books", typeof(List<Book>), typeof(MainWindow), new PropertyMetadata(new List<Book>()));
+
+
+
         public MainWindow()
         {
+            this.DataContext = this;
             InitializeComponent();
+
+            this.Books = BooksService.getBookInventory();
         }
+
     }
 }
