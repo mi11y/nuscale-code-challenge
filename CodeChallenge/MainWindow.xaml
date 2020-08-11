@@ -8,13 +8,21 @@
         mc:Ignorable="d"
         Title="Book Inventory" Height="450" Width="800">
     <Grid>
-        <TextBox Text="{Binding NewBookTitle}" HorizontalAlignment="Left" Height="23" Margin="10,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="271"/>
-        <TextBox Text="{Binding NewBookAuthor}" HorizontalAlignment="Left" Height="23" Margin="286,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="133"/>
-        <xctk:IntegerUpDown Value="{Binding NewBookPageCount}" HorizontalAlignment="Left" Margin="424,88,0,0" VerticalAlignment="Top" FormatString="N0" Height="23" Width="91"/>
-        <Button Click="AddClick" Content="Add Book" HorizontalAlignment="Left" Margin="520,88,0,0" VerticalAlignment="Top" Width="262" Height="23"/>
         
+        <!--Create a new book and insert-->
+        <TextBox Text="{Binding NewBookTitle}" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="271"/>
+        <TextBox Text="{Binding NewBookAuthor}" HorizontalAlignment="Left" Height="23" Margin="286,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="133"/>
+        <xctk:IntegerUpDown Value="{Binding NewBookPageCount}" HorizontalAlignment="Left" Margin="424,36,0,0" VerticalAlignment="Top" FormatString="N0" Height="23" Width="91"/>
+        <Button Click="AddClick" Content="Add Book" HorizontalAlignment="Left" Margin="520,36,0,0" VerticalAlignment="Top" Width="262" Height="23"/>
+
+        <!--Filter books by name-->
+        <TextBox Text="{Binding FilterByTitle}" HorizontalAlignment="Left" Height="23" Margin="286,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="229"/>
+        <Button Click="SearchClick"  Content="Go" HorizontalAlignment="Left" Margin="520,88,0,0" VerticalAlignment="Top" Width="75" Height="23"/>
+
+        <!--Show inventory and results-->
         <DataGrid ItemsSource="{Binding Books}" SelectedItem="{Binding SelectedBook}" IsReadOnly="True" HorizontalAlignment="Left" Height="221" Margin="10,116,0,0" VerticalAlignment="Top" Width="772" SelectionChanged="RowSelect" SelectionMode="Single"/>
 
+        <!--Updating and deleting-->
         <TextBox Text="{Binding UpdateBookTitle}" HorizontalAlignment="Left" Height="23" Margin="90,379,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="191"/>
         <TextBox Text="{Binding UpdateBookAuthor}" HorizontalAlignment="Left" Height="23" Margin="286,379,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="133"/>
         <xctk:IntegerUpDown Value="{Binding UpdateBookPageCount}" HorizontalAlignment="Left" Margin="424,379,0,0" VerticalAlignment="Top" FormatString="N0" Height="23" Width="91"/>
@@ -22,9 +30,9 @@
         <Button IsEnabled="{Binding isUpdateEnabled}" Click="UpdateClick" Content="Update Book" HorizontalAlignment="Left" Margin="520,379,0,0" VerticalAlignment="Top" Width="182" Height="23"/>
         <Button IsEnabled="{Binding IsDeleteEnabled}" Click="RemoveClick" Content="Delete Book" HorizontalAlignment="Left" Margin="707,379,0,0" VerticalAlignment="Top" Width="75" Height="23"/>
 
-        <Label Content="New Book Title" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top"/>
-        <Label Content="New Book Author" HorizontalAlignment="Left" Margin="286,62,0,0" VerticalAlignment="Top"/>
-        <Label Content="Page Count" HorizontalAlignment="Left" Margin="424,62,0,0" VerticalAlignment="Top" Width="91"/>
+        <Label Content="New Book Title" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="New Book Author" HorizontalAlignment="Left" Margin="286,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="Page Count" HorizontalAlignment="Left" Margin="424,10,0,0" VerticalAlignment="Top" Width="91"/>
         <Label Content="Update Book Title" HorizontalAlignment="Left" Margin="90,348,0,0" VerticalAlignment="Top"/>
         <Label Content="Update Book Author" HorizontalAlignment="Left" Margin="286,348,0,0" VerticalAlignment="Top"/>
         <Label Content="Update Page Count" HorizontalAlignment="Left" Margin="425,348,0,0" VerticalAlignment="Top"/>

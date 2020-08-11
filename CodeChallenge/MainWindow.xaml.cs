@@ -122,6 +122,16 @@ namespace CodeChallenge
 
 
 
+        public string FilterByTitle
+        {
+            get { return (string)GetValue(FilterByTitleProperty); }
+            set { SetValue(FilterByTitleProperty, value); }
+        }
+        public static readonly DependencyProperty FilterByTitleProperty =
+            DependencyProperty.Register("FilterByTitle", typeof(string), typeof(MainWindow), new PropertyMetadata(string.Empty));
+
+
+
         public MainWindow()
         {
             DataContext = this;
@@ -166,6 +176,11 @@ namespace CodeChallenge
             {
                 IsDeleteEnabled = isUpdateEnabled = !BooksService.updateBook(SelectedBook, UpdateBookAuthor, UpdateBookId, UpdateBookPageCount, UpdateBookTitle);
             }
+        }
+
+        private void SearchClick(object sender, RoutedEventArgs e)
+        {
+            Books = BooksService.getBooksByTitle(FilterByTitle);
         }
     }
 }

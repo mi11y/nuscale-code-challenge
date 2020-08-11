@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace CodeChallenge
 {
@@ -102,6 +103,31 @@ namespace CodeChallenge
                 return addNewBook(author, id, pageCount, title);
             }
             return false;
+        }
+
+        public static ObservableCollection<Book> getBooksByTitle(string title)
+        {
+            if(!string.IsNullOrWhiteSpace(title))
+            {
+                ObservableCollection<Book> result = new ObservableCollection<Book>();
+                title = title.ToLower();
+                var booksQuery =
+                    from book in Instance.inventory.ToList<Book>()
+                    where book.Title.ToLower().Contains(title)
+                    || book.Title.ToLower().StartsWith(title)
+                    || book.Title.ToLower().EndsWith(title)
+                    select book;
+
+                foreach (Book book in booksQuery)
+                {
+                    result.Add(book);
+                }
+                return result;
+            }
+            else
+            {
+                return getBookInventory();
+            }
         }
     }
 }
