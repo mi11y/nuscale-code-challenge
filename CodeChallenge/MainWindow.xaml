@@ -13,13 +13,13 @@
         <xctk:IntegerUpDown Value="{Binding NewBookPageCount}" HorizontalAlignment="Left" Margin="424,88,0,0" VerticalAlignment="Top" FormatString="N0" Height="23" Width="91"/>
         <Button Click="AddClick" Content="Add Book" HorizontalAlignment="Left" Margin="520,88,0,0" VerticalAlignment="Top" Width="262" Height="23"/>
         
-        <DataGrid ItemsSource="{Binding Books}" SelectedItem="{Binding SelectedBook}" HorizontalAlignment="Left" Height="221" Margin="10,116,0,0" VerticalAlignment="Top" Width="772" SelectionChanged="RowSelect" SelectionMode="Single" IsReadOnly="True"/>
+        <DataGrid ItemsSource="{Binding Books}" SelectedItem="{Binding SelectedBook}" IsReadOnly="True" HorizontalAlignment="Left" Height="221" Margin="10,116,0,0" VerticalAlignment="Top" Width="772" SelectionChanged="RowSelect" SelectionMode="Single"/>
 
         <TextBox Text="{Binding UpdateBookTitle}" HorizontalAlignment="Left" Height="23" Margin="90,379,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="191"/>
         <TextBox Text="{Binding UpdateBookAuthor}" HorizontalAlignment="Left" Height="23" Margin="286,379,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="133"/>
         <xctk:IntegerUpDown Value="{Binding UpdateBookPageCount}" HorizontalAlignment="Left" Margin="424,379,0,0" VerticalAlignment="Top" FormatString="N0" Height="23" Width="91"/>
         <xctk:IntegerUpDown Value="{Binding UpdateBookId, Mode=OneWay}" IsReadOnly="True" HorizontalAlignment="Left" Margin="10,379,0,0" VerticalAlignment="Top" FormatString="N0" Height="23" Width="75"/>
-        <Button Content="Update Book" HorizontalAlignment="Left" Margin="520,379,0,0" VerticalAlignment="Top" Width="182" Height="23"/>
+        <Button IsEnabled="{Binding isUpdateEnabled}" Click="UpdateClick" Content="Update Book" HorizontalAlignment="Left" Margin="520,379,0,0" VerticalAlignment="Top" Width="182" Height="23"/>
         <Button IsEnabled="{Binding IsDeleteEnabled}" Click="RemoveClick" Content="Delete Book" HorizontalAlignment="Left" Margin="707,379,0,0" VerticalAlignment="Top" Width="75" Height="23"/>
 
         <Label Content="New Book Title" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top"/>

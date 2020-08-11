@@ -70,23 +70,38 @@ namespace CodeChallenge
 
         public static bool addNewBook(string title, string author, int pageCount)
         {
+            return addNewBook(author, 0, pageCount, title);
+        }
+
+        public static bool addNewBook(string author, int id, int pageCount, string title)
+        {
             if (!String.IsNullOrWhiteSpace(title)
                 && !String.IsNullOrWhiteSpace(author)
                 && pageCount > 0)
             {
-                Instance.inventory.Add(new Book()
+                Book newBook = new Book()
                 {
                     Author = author,
                     Title = title,
-                    PageCount = pageCount,
-                    Id = Instance.inventory.Count + 1
-                });
+                    PageCount = pageCount
+                };
+                newBook.Id = id == 0 ? Instance.inventory.Count + 1 : id;
+                Instance.inventory.Add(newBook);
                 return true;
             }
             else
             {
                 return false;
             }
+        }
+
+        public static bool updateBook(Book toReplace, string author, int id, int pageCount, string title)
+        {
+            if (removeBook(toReplace))
+            {
+                return addNewBook(author, id, pageCount, title);
+            }
+            return false;
         }
     }
 }

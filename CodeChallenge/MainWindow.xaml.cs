@@ -65,10 +65,18 @@ namespace CodeChallenge
             get { return (bool)GetValue(IsDeleteEnabledProperty); }
             set { SetValue(IsDeleteEnabledProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for IsDeleteEnabled.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsDeleteEnabledProperty =
             DependencyProperty.Register("IsDeleteEnabled", typeof(bool), typeof(MainWindow), new PropertyMetadata(true));
+
+
+
+        public bool isUpdateEnabled
+        {
+            get { return (bool)GetValue(isUpdateEnabledProperty); }
+            set { SetValue(isUpdateEnabledProperty, value); }
+        }
+        public static readonly DependencyProperty isUpdateEnabledProperty =
+            DependencyProperty.Register("isUpdateEnabled", typeof(bool), typeof(MainWindow), new PropertyMetadata(true));
 
 
 
@@ -124,12 +132,12 @@ namespace CodeChallenge
         private void RemoveClick(object sender, RoutedEventArgs e)
         {
             BooksService.removeBook(SelectedBook);
-            IsDeleteEnabled = Books.Count == 0 ? false : true;
+            IsDeleteEnabled = isUpdateEnabled = Books.Count == 0 ? false : true;
         }
 
         private void AddClick(object sender, RoutedEventArgs e)
         {
-            IsDeleteEnabled = BooksService.addNewBook(NewBookTitle, NewBookAuthor, NewBookPageCount);
+            IsDeleteEnabled = isUpdateEnabled = BooksService.addNewBook(NewBookTitle, NewBookAuthor, NewBookPageCount);
         }
 
         private void RowSelect(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -140,6 +148,7 @@ namespace CodeChallenge
                 UpdateBookTitle = SelectedBook.Title;
                 UpdateBookPageCount = SelectedBook.PageCount;
                 UpdateBookId = SelectedBook.Id;
+                IsDeleteEnabled = isUpdateEnabled = true;
             }
             else
             {
@@ -147,8 +156,16 @@ namespace CodeChallenge
                 UpdateBookTitle = string.Empty;
                 UpdateBookPageCount = 0;
                 UpdateBookId = 0;
+                IsDeleteEnabled = isUpdateEnabled = false;
             }
         }
 
+        private void UpdateClick(object sender, RoutedEventArgs e)
+        {
+            if(SelectedBook != null)
+            {
+                IsDeleteEnabled = isUpdateEnabled = !BooksService.updateBook(SelectedBook, UpdateBookAuthor, UpdateBookId, UpdateBookPageCount, UpdateBookTitle);
+            }
+        }
     }
 }
