@@ -30,6 +30,20 @@ namespace CodeChallenge
         public static readonly DependencyProperty SelectedBookProperty =
             DependencyProperty.Register("SelectedBook", typeof(Book), typeof(MainWindow), new PropertyMetadata(new Book()));
 
+
+
+        public bool IsButtonEnabled
+        {
+            get { return (bool)GetValue(IsButtonEnabledProperty); }
+            set { SetValue(IsButtonEnabledProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsButtonEnabled.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsButtonEnabledProperty =
+            DependencyProperty.Register("IsButtonEnabled", typeof(bool), typeof(MainWindow), new PropertyMetadata(true));
+
+
+
         public MainWindow()
         {
             DataContext = this;
@@ -41,7 +55,7 @@ namespace CodeChallenge
         private void RemoveClick(object sender, RoutedEventArgs e)
         {
             BooksService.removeBook(SelectedBook);
-            Console.WriteLine(Books.Count);
+            IsButtonEnabled = Books.Count == 0 ? false : true;
         }
     }
 }

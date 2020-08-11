@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CodeChallenge"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Book Inventory" Height="450" Width="800">
     <Grid>
         <ListView
             HorizontalAlignment = "Left" Height = "299" Margin = "10,10,0,0" 
@@ -27,6 +27,7 @@
             VerticalAlignment="Top" 
             Width="75"
             Click="RemoveClick"
+            IsEnabled="{Binding IsButtonEnabled}"
             />
     </Grid>
 </Window>
