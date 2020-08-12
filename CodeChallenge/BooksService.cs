@@ -6,8 +6,33 @@ using System.Windows;
 
 namespace CodeChallenge
 {
+
+    /// <summary>
+    /// This class is responsible for processing user data and storing it.
+    /// This class behaves "like" a singleton in that there is one instance
+    /// of this type that is accessible behind static methods.
+    /// 
+    /// This is so the code-behind of a view can access and use this class'
+    /// functionality without having to make an instance and be responsible for it.
+    /// In order to interact with this class, a code-behind should rely on the static
+    /// methods defined at the bottom.
+    /// 
+    /// For storing the data, this class can either "mock" storing the data in
+    /// a collection locally, and will mimick a database. However changes made will
+    /// not persist, and IDs will not to be unique.
+    /// 
+    /// An optional function this class provides is to use a MySQL database. When
+    /// enabled, the class will instead connect to a remote MySQL database and
+    /// create / read / update / delete from that database.
+    /// </summary>
     class BooksService
     {
+
+        /// <summary>
+        /// In order to enable database functionality, change the bellow constant
+        /// "USE_DB" to true, and then update the constant "CONNECTION_STRING"
+        /// with the data as it applies to your database.
+        /// </summary>
         private readonly bool USE_DB = false;
         private readonly string CONNECTION_STRING = "server=0.0.0.0;user=USER;password=PASSWORD;database=DB";
 
@@ -173,6 +198,8 @@ namespace CodeChallenge
                 Title = title,
                 PageCount = pageCount
             };
+            // Keep the old ID if provided (such as during an update), or 
+            // assign the new book a new ID (may not be unique).
             newBook.Id = id == 0 ? Instance.inventory.Count + 1 : id;
             Instance.inventory.Add(newBook);
             return true;
@@ -190,11 +217,22 @@ namespace CodeChallenge
             }
         }
 
+
+        /// <summary>
+        /// This class provides the locally stored inventory of books.
+        /// If there is no current instance of the singleton, one will
+        /// be created and will query the data store for records.
+        /// </summary>
         public static ObservableCollection<Book> getBookInventory()
         {
             return Instance.inventory;
         }
 
+
+        /// <summary>
+        /// This class queries the data store for all records, and replaces
+        /// the locally stored collection with the results.
+        /// </summary>
         public static ObservableCollection<Book> refreshInventory()
         {
             if (Instance.USE_DB)
@@ -204,6 +242,13 @@ namespace CodeChallenge
             return getBookInventory();
         }
 
+
+        /// <summary>
+        /// This and the following methods provide create / update / delete
+        /// functionality. If using a database, these changes will be performed
+        /// on the database, otherwise they will be applied to the local data
+        /// store.
+        /// </summary>
         public static bool removeBook(Book toRemove)
         {
             if(Instance.USE_DB)
@@ -220,12 +265,19 @@ namespace CodeChallenge
             }
         }
 
-        public static bool addNewBook(string title, string author, int pageCount)
+
+        /// <summary>
+        /// A code-behind should use this method of adding a new book, as
+        /// this will call the neighboring overloaded method, passing an id of 0
+        /// to indicate that a new ID should be assigned to this book (unlike when
+        /// an update is called and an ID is provided).
+        /// </summary>
+        public static bool addNewBook(string author,  int pageCount, string title)
         {
             return addNewBook(author, 0, pageCount, title);
         }
 
-        public static bool addNewBook(string author, int id, int pageCount, string title)
+        private static bool addNewBook(string author, int id, int pageCount, string title)
         {
             if (!String.IsNullOrWhiteSpace(title)
                 && !String.IsNullOrWhiteSpace(author)
@@ -246,6 +298,13 @@ namespace CodeChallenge
             }
         }
 
+
+        /// <summary>
+        /// When updating a book without a database, the book is first removed from the local
+        /// data store and then re-added with the new information, but the same ID. This is done
+        /// to emulate what would be a database for inventory.
+        /// TODO: Add input checking similar to that of addNewBook()
+        /// </summary>
         public static bool updateBook(Book toReplace, string author, int id, int pageCount, string title)
         {
             if(Instance.USE_DB)
@@ -262,6 +321,10 @@ namespace CodeChallenge
             return false;
         }
 
+
+        /// <summary>
+        /// Locally filter the inventory by a book's title using LINQ.
+        /// </summary>
         public static ObservableCollection<Book> getBooksByTitle(string title)
         {
             if(!string.IsNullOrWhiteSpace(title))
