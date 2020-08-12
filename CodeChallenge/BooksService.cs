@@ -1,23 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MySqlConnector;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 
 namespace CodeChallenge
 {
     class BooksService
     {
-
+        private readonly bool USE_DB = false;
+        private readonly string CONNECTION_STRING = "server=0.0.0.0;user=USER;password=PASSWORD;database=DB";
 
         private ObservableCollection<Book> inventory;
+        private MySqlConnection mariaDB;
         private static BooksService instance = null;
 
         private BooksService()
         {
-            inventory = getAllInventory();
+            
+            if (USE_DB)
+            {
+                mariaDB = new MySqlConnection(CONNECTION_STRING);
+                inventory = selectAllFromBooks();
+            }
+            else
+            {
+                inventory = mockInventory();
+            }
         }
 
-        private ObservableCollection<Book> getAllInventory()
+        private ObservableCollection<Book> selectAllFromBooks()
+        {
+
+            ObservableCollection<Book> queryResult = new ObservableCollection<Book>();
+
+            try
+            {
+                mariaDB.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM books;", mariaDB);
+                MySqlDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    queryResult.Add(new Book()
+                    {
+                        Id          = (int)rdr[0],
+                        Author      = (string)rdr[1],
+                        Title       = (string)rdr[2],
+                        PageCount   = (int)rdr[3]
+                    });
+                }
+                rdr.Close();
+            }
+            catch (MySqlException e)
+            {
+
+                MessageBox.Show(e.Message);
+            }
+            mariaDB.Close();
+
+            return queryResult;
+        }
+
+        private ObservableCollection<Book> mockInventory()
         {
             ObservableCollection<Book> queryResult = new ObservableCollection<Book>();
             queryResult.Add(new Book()
