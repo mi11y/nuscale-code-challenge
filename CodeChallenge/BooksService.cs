@@ -63,6 +63,27 @@ namespace CodeChallenge
             return queryResult;
         }
 
+        private bool deleteByBook(Book toDelete)
+        {
+            try
+            {
+                mariaDB.Open();
+
+                MySqlCommand cmd = new MySqlCommand("DELETE FROM books WHERE book_id = @book_id", mariaDB);
+                cmd.Parameters.AddWithValue("@book_id", toDelete.Id);
+                MySqlDataReader rdr = cmd.ExecuteReader();
+
+                rdr.Close();
+            }
+            catch (MySqlException e)
+            {
+                MessageBox.Show(e.Message);
+                return false;
+            }
+            mariaDB.Close();
+            return true;
+        }
+
         private ObservableCollection<Book> mockInventory()
         {
             ObservableCollection<Book> queryResult = new ObservableCollection<Book>();
@@ -83,7 +104,21 @@ namespace CodeChallenge
             return queryResult;
         }
 
-        public static BooksService Instance
+        private bool mockRemoveBook(Book toRemove)
+        {
+            if (Instance.inventory.Remove(toRemove))
+            {
+                System.Console.WriteLine("Removed");
+                return true;
+            }
+            else
+            {
+                System.Console.WriteLine("Not Found");
+                return false;
+            }
+        }
+
+        private static BooksService Instance
         {
             get
             {
@@ -100,18 +135,28 @@ namespace CodeChallenge
             return Instance.inventory;
         }
 
+        public static ObservableCollection<Book> refreshInventory()
+        {
+            if (Instance.USE_DB)
+            {
+                Instance.inventory = Instance.selectAllFromBooks();
+            }
+            return getBookInventory();
+        }
+
         public static bool removeBook(Book toRemove)
         {
-
-            if (Instance.inventory.Remove(toRemove))
+            if(Instance.USE_DB)
             {
-                System.Console.WriteLine("Removed");
-                return true;
+                if(Instance.inventory.Contains(toRemove))
+                {
+                    return Instance.deleteByBook(toRemove);
+                }
+                return false;
             }
             else
             {
-                System.Console.WriteLine("Not Found");
-                return false;
+                return Instance.mockRemoveBook(toRemove);
             }
         }
 
