@@ -217,6 +217,10 @@ namespace CodeChallenge
             }
         }
 
+        private static bool validateInput(string author, int pageCount, string title)
+        {
+            return !String.IsNullOrWhiteSpace(title) && !String.IsNullOrWhiteSpace(author) && pageCount > 0;
+        }
 
         /// <summary>
         /// This class provides the locally stored inventory of books.
@@ -279,9 +283,7 @@ namespace CodeChallenge
 
         private static bool addNewBook(string author, int id, int pageCount, string title)
         {
-            if (!String.IsNullOrWhiteSpace(title)
-                && !String.IsNullOrWhiteSpace(author)
-                && pageCount > 0)
+            if (validateInput(author, pageCount, title))
             {
                 if(Instance.USE_DB)
                 {
@@ -292,10 +294,7 @@ namespace CodeChallenge
                     return Instance.mockAddNewBook(author, id, pageCount, title);
                 }
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
 
@@ -307,13 +306,13 @@ namespace CodeChallenge
         /// </summary>
         public static bool updateBook(Book toReplace, string author, int id, int pageCount, string title)
         {
-            if(Instance.USE_DB)
+            if(validateInput(author, pageCount, title))
             {
-                return Instance.updateBookById(author, id, pageCount, title);
-            }
-            else
-            {
-                if (removeBook(toReplace))
+                if (Instance.USE_DB)
+                {
+                    return Instance.updateBookById(author, id, pageCount, title);
+                }
+                else if (removeBook(toReplace))
                 {
                     return addNewBook(author, id, pageCount, title);
                 }

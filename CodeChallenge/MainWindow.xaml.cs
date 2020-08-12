@@ -186,9 +186,9 @@ namespace CodeChallenge
         {
             if(SelectedBook != null)
             {
-                BooksService.updateBook(SelectedBook, UpdateBookAuthor, UpdateBookId, UpdateBookPageCount, UpdateBookTitle);
+                bool successfulUpdate = BooksService.updateBook(SelectedBook, UpdateBookAuthor, UpdateBookId, UpdateBookPageCount, UpdateBookTitle);
                 Books = BooksService.refreshInventory();
-                IsDeleteEnabled = isUpdateEnabled = false;
+                IsDeleteEnabled = isUpdateEnabled = !successfulUpdate;
             }
         }
 
