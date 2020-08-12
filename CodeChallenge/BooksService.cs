@@ -107,6 +107,30 @@ namespace CodeChallenge
             return true;
         }
 
+        private bool updateBookById(string author, int id, int pageCount, string title)
+        {
+            try
+            {
+                mariaDB.Open();
+
+                MySqlCommand cmd = new MySqlCommand("UPDATE books SET author = @author, title = @title, page_count = @page_count WHERE book_id = @book_id;", mariaDB);
+                cmd.Parameters.AddWithValue("@author", author);
+                cmd.Parameters.AddWithValue("@book_id", id);
+                cmd.Parameters.AddWithValue("@title", title);
+                cmd.Parameters.AddWithValue("@page_count", pageCount);
+                MySqlDataReader rdr = cmd.ExecuteReader();
+
+                rdr.Close();
+            }
+            catch (MySqlException e)
+            {
+                MessageBox.Show(e.Message);
+                throw;
+            }
+            mariaDB.Close();
+            return true;
+        }
+
         private ObservableCollection<Book> mockInventory()
         {
             ObservableCollection<Book> queryResult = new ObservableCollection<Book>();
@@ -224,9 +248,16 @@ namespace CodeChallenge
 
         public static bool updateBook(Book toReplace, string author, int id, int pageCount, string title)
         {
-            if (removeBook(toReplace))
+            if(Instance.USE_DB)
             {
-                return addNewBook(author, id, pageCount, title);
+                return Instance.updateBookById(author, id, pageCount, title);
+            }
+            else
+            {
+                if (removeBook(toReplace))
+                {
+                    return addNewBook(author, id, pageCount, title);
+                }
             }
             return false;
         }
