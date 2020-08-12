@@ -147,6 +147,7 @@ namespace CodeChallenge
         private void AddClick(object sender, RoutedEventArgs e)
         {
             BooksService.addNewBook(NewBookTitle, NewBookAuthor, NewBookPageCount);
+            Books = BooksService.refreshInventory();
             IsDeleteEnabled = isUpdateEnabled = SelectedBook != null;
         }
 

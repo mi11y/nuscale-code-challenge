@@ -69,7 +69,7 @@ namespace CodeChallenge
             {
                 mariaDB.Open();
 
-                MySqlCommand cmd = new MySqlCommand("DELETE FROM books WHERE book_id = @book_id", mariaDB);
+                MySqlCommand cmd = new MySqlCommand("DELETE FROM books WHERE book_id = @book_id;", mariaDB);
                 cmd.Parameters.AddWithValue("@book_id", toDelete.Id);
                 MySqlDataReader rdr = cmd.ExecuteReader();
 
@@ -79,6 +79,29 @@ namespace CodeChallenge
             {
                 MessageBox.Show(e.Message);
                 return false;
+            }
+            mariaDB.Close();
+            return true;
+        }
+
+        private bool insertNewBook(string author, int pageCount, string title)
+        {
+            try
+            {
+                mariaDB.Open();
+
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO books (author, title, page_count) VALUES (@author, @title, @page_count);", mariaDB);
+                cmd.Parameters.AddWithValue("@author", author);
+                cmd.Parameters.AddWithValue("@title", title);
+                cmd.Parameters.AddWithValue("@page_count", pageCount);
+                MySqlDataReader rdr = cmd.ExecuteReader();
+
+                rdr.Close();
+            }
+            catch (MySqlException e)
+            {
+                MessageBox.Show(e.Message);
+                throw;
             }
             mariaDB.Close();
             return true;
@@ -116,6 +139,19 @@ namespace CodeChallenge
                 System.Console.WriteLine("Not Found");
                 return false;
             }
+        }
+
+        private bool mockAddNewBook(string author, int id, int pageCount, string title)
+        {
+            Book newBook = new Book()
+            {
+                Author = author,
+                Title = title,
+                PageCount = pageCount
+            };
+            newBook.Id = id == 0 ? Instance.inventory.Count + 1 : id;
+            Instance.inventory.Add(newBook);
+            return true;
         }
 
         private static BooksService Instance
@@ -171,15 +207,14 @@ namespace CodeChallenge
                 && !String.IsNullOrWhiteSpace(author)
                 && pageCount > 0)
             {
-                Book newBook = new Book()
+                if(Instance.USE_DB)
                 {
-                    Author = author,
-                    Title = title,
-                    PageCount = pageCount
-                };
-                newBook.Id = id == 0 ? Instance.inventory.Count + 1 : id;
-                Instance.inventory.Add(newBook);
-                return true;
+                    return Instance.insertNewBook(author, pageCount, title);
+                }
+                else
+                {
+                    return Instance.mockAddNewBook(author, id, pageCount, title);
+                }
             }
             else
             {
