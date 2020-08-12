@@ -1,15 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace CodeChallenge
 {
 
+    /// <summary>
+    /// In order to support data binding between the XAML view and this code-behind,
+    /// Dependency Properties are useful here as they extend the regular functionality
+    /// of a regular class property to support binding (among other things).
+    /// 
+    /// By using Dependency Properties, the view can bind to these properties and update
+    /// its presentation of the data when the data changes. Now we can have a code-behind
+    /// whose responsibility is just to set the data that the view will present.
+    /// </summary>
     public partial class MainWindow : Window
     {
-
-
 
         public ObservableCollection<Book> Books
         {
@@ -137,6 +142,12 @@ namespace CodeChallenge
             Books = BooksService.getBookInventory();
         }
 
+
+        /// <summary>
+        /// These remaining methods handle events from the view, and rely on a different class for
+        /// processing the data. Once that class returns results, these methods will update the
+        /// dependency properties above, which will in turn update the data presented to the user.
+        /// </summary>
         private void RemoveClick(object sender, RoutedEventArgs e)
         {
             BooksService.removeBook(SelectedBook);
@@ -146,7 +157,7 @@ namespace CodeChallenge
 
         private void AddClick(object sender, RoutedEventArgs e)
         {
-            BooksService.addNewBook(NewBookTitle, NewBookAuthor, NewBookPageCount);
+            BooksService.addNewBook(NewBookAuthor, NewBookPageCount, NewBookTitle);
             Books = BooksService.refreshInventory();
             IsDeleteEnabled = isUpdateEnabled = SelectedBook != null;
         }
@@ -175,9 +186,9 @@ namespace CodeChallenge
         {
             if(SelectedBook != null)
             {
-                BooksService.updateBook(SelectedBook, UpdateBookAuthor, UpdateBookId, UpdateBookPageCount, UpdateBookTitle);
+                bool successfulUpdate = BooksService.updateBook(SelectedBook, UpdateBookAuthor, UpdateBookId, UpdateBookPageCount, UpdateBookTitle);
                 Books = BooksService.refreshInventory();
-                IsDeleteEnabled = isUpdateEnabled = false;
+                IsDeleteEnabled = isUpdateEnabled = !successfulUpdate;
             }
         }
 
